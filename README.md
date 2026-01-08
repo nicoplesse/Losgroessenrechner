@@ -11,7 +11,6 @@ Die Anwendung ermöglicht es, Produkte anzulegen, die optimale Losgröße zu ber
 - Persistente Speicherung von Produkten (**PostgreSQL + JPA/Hibernate**)
 - Produktübersicht mit Löschfunktion
 - Saubere Trennung von Controller, Service, Repository und Entity
-- Bereit für Cloud-Deployment (z. B. Railway, Render, AWS, Azure)
 
 ---
 

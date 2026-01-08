@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Graph – <span th:text="${name}"></span></title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+        margin: 0;
+    }
+
+    .container {
+        background-color: white;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        text-align: center;
+        width: 90%;
+        max-width: 900px;
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    canvas {
+        margin-top: 20px;
+    }
+
+    a.back {
+        display: inline-block;
+        margin-top: 20px;
+        color: #4CAF50;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    a.back:hover {
+        color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1 th:text="'Graph für: ' + ${name}"></h1>
+
+  <canvas id="losgroesseChart" width="800" height="400"></canvas>
+
+  <a class="back" href="/produkte">← Zurück zur Produktübersicht</a>
+</div>
+
+<script th:inline="javascript">
+  let Qopt = [[${losgroesse}]];
+  let Qmax = Math.ceil(Qopt * 2);
+
+  let jahresmenge = [[${jahresmenge}]];
+  let ruestkosten = [[${ruestkosten}]];
+  let stueckkosten = [[${stueckkosten}]];
+  let zinsfuss = [[${zinsfuss}]] / 100.0;
+
+  let labels = [];
+  let kosten = [];
+  let schritt = Math.max(1, Math.round(Qmax / 100));
+
+  for (let Q = schritt; Q <= Qmax; Q += schritt) {
+      labels.push(Q);
+      let ruest = (jahresmenge / Q) * ruestkosten;
+      let lager = (Q / 2) * stueckkosten * zinsfuss;
+      kosten.push(ruest + lager);
+  }
+
+  const ctx = document.getElementById('losgroesseChart').getContext('2d');
+  new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: 'Gesamtkosten',
+              data: kosten,
+              borderColor: '#4CAF50',
+              backgroundColor: 'rgba(76, 175, 80, 0.2)',
+              fill: true,
+              tension: 0.3
+          }]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              title: { display: true, text: 'Gesamtkosten vs. Losgröße' },
+              legend: { display: false }
+          },
+          scales: {
+              x: { title: { display: true, text: 'Losgröße (Q)' } },
+              y: { title: { display: true, text: 'Kosten (€)' }, beginAtZero: true }
+          }
+      }
+  });
+</script>
+
+</body>
+</html>

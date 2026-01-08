@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Berechnungsergebnis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 500px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        strong {
+            color: #4CAF50;
+        }
+
+        canvas {
+            margin-top: 30px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a.back {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        a.back:hover {
+            color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Berechnungsergebnis</h1>
+    <p>
+        Optimale Losgröße: <strong th:text="${losgroesse}"></strong>
+    </p>
+
+    <!-- SPEICHERN -->
+    <form action="/produkt/speichern" method="post">
+        <input type="hidden" name="name" th:value="${name}">
+        <input type="hidden" name="jahresmenge" th:value="${jahresmenge}">
+        <input type="hidden" name="ruestkosten" th:value="${ruestkosten}">
+        <input type="hidden" name="stueckkosten" th:value="${stueckkosten}">
+        <input type="hidden" name="zinsfuss" th:value="${zinsfuss}">
+        <input type="hidden" name="losgroesse" th:value="${losgroesse}">
+        <button type="submit">Produkt speichern</button>
+    </form>
+
+    <canvas id="losgroesseChart" width="400" height="250"></canvas>
+
+    <a class="back" href="/produkt/neu">← Zurück</a>
+</div>
+
+<script th:inline="javascript">
+    /* Daten aus Thymeleaf */
+    let Qopt = [[${losgroesse}]];
+    let Qmax = Math.ceil(Qopt * 2);  // Doppelte optimale Losgröße für Anzeige
+    let jahresmenge = [[${jahresmenge}]];
+    let ruestkosten = [[${ruestkosten}]];
+    let stueckkosten = [[${stueckkosten}]];
+    let zinsfuss = [[${zinsfuss}]] / 100.0;
+
+    /* X-Achse: Losgrößen (gleichmäßige Schritte) */
+    let labels = [];
+    let kosten = [];
+    let schritt = Math.max(1, Math.round(Qmax/100)); // 100 Punkte für glatte Kurve
+
+    for (let Q = schritt; Q <= Qmax; Q += schritt) {
+        labels.push(Q);
+        let ruest = (jahresmenge / Q) * ruestkosten;
+        let lager = (Q / 2) * stueckkosten * zinsfuss;
+        kosten.push(ruest + lager);
+    }
+
+    /* Chart.js */
+    const ctx = document.getElementById('losgroesseChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Gesamtkosten',
+                data: kosten,
+                borderColor: '#4CAF50',
+                backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                fill: true,
+                tension: 0.3  // glatte Kurve
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Gesamtkosten vs. Losgröße'
+                },
+                legend: { display: false },
+            },
+            scales: {
+                x: {
+                    title: { display: true, text: 'Losgröße (Q)' },
+                    ticks: { stepSize: schritt }  // gleichmäßige Skalierung
+                },
+                y: {
+                    title: { display: true, text: 'Kosten (€)' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+</body>
+</html>

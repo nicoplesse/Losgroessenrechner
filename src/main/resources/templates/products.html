@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Produktübersicht</title>
+  <style>
+    /* Grundlayout */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+        margin: 0;
+    }
+
+    .container {
+        background-color: white;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 900px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    button {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    /* Löschen-Button rot */
+    button[type="submit"] {
+        background-color: #f44336;
+        color: white;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #d32f2f;
+        transform: scale(1.05);
+    }
+
+    a.back {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #4CAF50;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    a.back:hover {
+        color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Produktübersicht</h1>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Produktionsmenge p.a.</th>
+      <th>Rüstkosten</th>
+      <th>Kosten pro Stück</th>
+      <th>Kapitalkosten (%)</th>
+      <th>Optimale Losgröße</th>
+      <th>Aktion</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="product : ${products}">
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.jahresmenge}"></td>
+      <td th:text="${product.ruestkosten}"></td>
+      <td th:text="${product.stueckkosten}"></td>
+      <td th:text="${product.zinsfuss}"></td>
+      <td th:text="${product.optimaleLosgroesse}"></td>
+      <td>
+        <!-- Löschen Button -->
+        <form th:action="@{/produkt/loeschen/{id}(id=${product.id})}" method="post" style="display:inline-block;">
+          <button type="submit">Löschen</button>
+        </form>
+
+        <!-- Graph Button -->
+        <form th:action="@{/produkt/graph/{id}(id=${product.id})}" method="get" style="display:inline-block; margin-left:5px;">
+          <button type="submit" style="background-color:#2196F3; color:white;">Graph anzeigen</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+
+  </table>
+
+  <a class="back" href="/">← Zurück zur Home</a>
+</div>
+
+</body>
+</html>

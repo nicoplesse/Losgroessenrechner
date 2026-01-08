@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Produkt anlegen – Optimale Losgröße</title>
+  <style>
+    /* Grundlayout */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background-color: white;
+        padding: 40px 60px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        width: 400px;
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 15px 0;
+        margin-top: 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #45a049;
+        transform: scale(1.02);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Produkt anlegen</h1>
+  <h2>Optimale Losgröße berechnen</h2>
+
+  <form action="/produkt/berechnen" method="post">
+
+    <!-- Produktname -->
+    <label for="name">Produktname:</label>
+    <input type="text" id="name" name="name" required>
+
+    <!-- Produktionsmenge -->
+    <label for="jahresmenge">Produktionsmenge p.a. (Stück/Jahr):</label>
+    <input type="number" id="jahresmenge" name="jahresmenge" min="1" required>
+
+    <!-- Rüstkosten -->
+    <label for="ruestkosten">Rüstkosten pro Los (€):</label>
+    <input type="number" id="ruestkosten" name="ruestkosten" step="0.01" min="0" required>
+
+    <!-- Stückkosten -->
+    <label for="stueckkosten">Wert / Kosten pro Stück (€):</label>
+    <input type="number" id="stueckkosten" name="stueckkosten" step="0.01" min="0" required>
+
+    <!-- Kapitalkosten -->
+    <label for="zinsfuss">Kapitalkosten (Zinsfuß % p.a.):</label>
+    <input type="number" id="zinsfuss" name="zinsfuss" step="0.01" min="0" required>
+
+    <button type="submit">Optimale Losgröße berechnen</button>
+
+  </form>
+</div>
+
+</body>
+</html>

@@ -1,19 +1,27 @@
-# BUILD
-FROM maven:3.9.9-eclipse-temurin-25 AS build
+# =========================
+# BUILD STAGE
+# =========================
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
+# Nur pom.xml kopieren → Dependency Cache
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline -B
 
+# Quellcode kopieren & bauen
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn package -DskipTests
 
 
-# RUNTIME
-FROM eclipse-temurin:25-jre-alpine
+# =========================
+# RUNTIME STAGE
+# =========================
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
+# Expliziter Jar-Name empfohlen
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]

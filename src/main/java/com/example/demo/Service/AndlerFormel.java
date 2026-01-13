@@ -21,6 +21,10 @@ public class AndlerFormel {
             double zinsfuss
     ) {
 
+        if (zinsfuss <= 0) {
+            throw new IllegalArgumentException("Zinsfuss must be greater than 0");
+        }
+
         // Prozent → Dezimal
         double i = zinsfuss / 100.0;
 

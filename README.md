@@ -78,7 +78,13 @@ Die Anwendung ist vollständig containerisiert und in eine automatisierte **CI/C
   - automatisch zu **Docker Hub** gepusht
 - Einheitliche Laufzeitumgebung durch Docker
 
-Dies ermöglicht einen reproduzierbaren Build-Prozess und eine einfache Bereitstellung in Cloud-Umgebungen.
+---
+
+### Cloud Deployment
+- Deployment der Docker-basierten Anwendung auf:
+  - **Render** oder
+  - **Railway**
+- Öffentliche URL zur Live-Demonstration der Anwendung
 
 ### Automatisches Deployment mit Render
 
@@ -105,7 +111,7 @@ Geplant ist der Ausbau der Testabdeckung:
 - **1 Repository Test** (JPA / Datenbank)
 - **1 Integration Test** (End-to-End)
 
----
+
 
 ## Ziel des Projekts
 

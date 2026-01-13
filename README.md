@@ -72,9 +72,14 @@ Die Anwendung ist vollständig containerisiert und verfügt über eine **automat
   - als Docker Image verpackt
   - automatisch zu **Docker Hub** gepusht
 - Einheitliche Laufzeitumgebung durch Docker
-- Vorbereitung für Cloud-Deployment (Production Ready)
 
-Dies ermöglicht einen reproduzierbaren Build-Prozess und eine einfache Bereitstellung in Cloud-Umgebungen.
+---
+
+### Cloud Deployment
+- Deployment der Docker-basierten Anwendung auf:
+  - **Render** oder
+  - **Railway**
+- Öffentliche URL zur Live-Demonstration der Anwendung
 
 ---
 
@@ -88,13 +93,7 @@ Geplant ist der Ausbau der Testabdeckung:
 - **1 Repository Test** (JPA / Datenbank)
 - **1 Integration Test** (End-to-End)
 
-### Cloud Deployment
-- Deployment der Docker-basierten Anwendung auf:
-  - **Render** oder
-  - **Railway**
-- Öffentliche URL zur Live-Demonstration der Anwendung
 
----
 
 ## 🎯 Ziel des Projekts
 

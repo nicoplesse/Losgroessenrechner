@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Entity.Product;
 import com.example.demo.Service.AndlerFormel;
 import com.example.demo.Entity.ProductRepo;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -29,7 +32,11 @@ class ProductDBControllerTest {
 
 
 
-
+    /**
+     * Testet, dass der /produkt/berechnen-Endpoint
+     * die Ergebnis-View zurückgibt und die berechnete Losgröße
+     * korrekt im Model abgelegt wird.
+     */
     @Test
     void berechnen_returnsResultViewWithLosgroesse() throws Exception {
         // GIVEN
@@ -55,12 +62,12 @@ class ProductDBControllerTest {
                 .andExpect(view().name("result"))
                 .andExpect(model().attribute("name", name))
                 .andExpect(model().attribute("losgroesse", expectedLosgroesse));
-
-
     }
 
-
-
+    /**
+     * Testet, dass der /produkt/speichern-Endpoint
+     * nach dem Absenden des Formulars korrekt auf die Startseite weiterleitet.
+     */
     @Test
     void speichern_redirectsToHome() throws Exception {
         mockMvc.perform(post("/produkt/speichern")
@@ -74,5 +81,22 @@ class ProductDBControllerTest {
                 .andExpect(view().name("redirect:/"));
     }
 
-    //Füge noch eine Methode hinzu die das Speichern testet
+    /**
+     * Testet, dass beim Speichern eines Produkts
+     * das Repository aufgerufen wird und ein Product persistiert werden soll.
+     */
+    @Test
+    void speichern_callsRepositorySave() throws Exception {
+        mockMvc.perform(post("/produkt/speichern")
+                        .param("name", "TestProdukt")
+                        .param("jahresmenge", "1000")
+                        .param("ruestkosten", "100")
+                        .param("stueckkosten", "10")
+                        .param("zinsfuss", "5")
+                        .param("losgroesse", "200"))
+                .andExpect(status().is3xxRedirection());
+
+        verify(productRepo).save(any(Product.class));
+    }
+
 }

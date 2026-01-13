@@ -3,7 +3,12 @@
 Eine Webapplikation zur Berechnung und Verwaltung der **optimalen Losgröße nach der Andler-Formel**.  
 Die Anwendung ermöglicht es, Produkte anzulegen, die optimale Losgröße zu berechnen, grafisch darzustellen und dauerhaft in einer PostgreSQL-Datenbank zu speichern.
 
+**Live-Demo:** [https://losgroessenrechner.onrender.com](https://losgroessenrechner.onrender.com)
+
 ---
+
+
+
 
 ## Features
 
@@ -15,8 +20,13 @@ Die Anwendung ermöglicht es, Produkte anzulegen, die optimale Losgröße zu ber
 - Saubere Trennung von Controller, Service, Repository und Entity
 - Containerisierung der Anwendung mit **Docker**
 - Automatisierte CI-Pipeline mit **GitHub Actions**
+- **Umfassende Testabdeckung** (Unit, Controller, Repository, Integration)
+- **Cloud-Deployment**
+  - Docker-basierte Anwendung auf **Render** oder **Railway**
+  - Automatisches Deployment bei Push auf den `dev`-Branch
+  - Öffentliche URL zur Live-Demonstration der Anwendung
+  - Persistente PostgreSQL-Datenbank in der Cloud
 
----
 
 ## Berechnungsgrundlage
 
@@ -80,12 +90,6 @@ Die Anwendung ist vollständig containerisiert und in eine automatisierte **CI/C
 
 ---
 
-### Cloud Deployment
-- Deployment der Docker-basierten Anwendung auf:
-  - **Render** oder
-  - **Railway**
-- Öffentliche URL zur Live-Demonstration der Anwendung
-
 ### Automatisches Deployment mit Render
 
 - Das GitHub-Repository ist direkt mit **Render** verbunden
@@ -101,17 +105,18 @@ Die Anwendung ist vollständig containerisiert und in eine automatisierte **CI/C
 - Persistente Speicherung aller Produkt- und Berechnungsdaten
 
 
-## Perspektive & geplante Erweiterungen
+## Testabdeckung
 
-### Tests
-Geplant ist der Ausbau der Testabdeckung:
+Die Anwendung enthält **aktuelle Tests** für alle wichtigen Komponenten:
 
-- **3–5 Unit Tests** (Service-Logik, Berechnung)
-- **2–3 Controller Tests** (Web Layer)
-- **1 Repository Test** (JPA / Datenbank)
-- **1 Integration Test** (End-to-End)
+- **Unit Tests** – Überprüfung der Berechnungslogik in Services (AndlerFormel)
+- **Controller Tests** – Sicherstellen der richtigen Routen, View-Namen und Model-Attribute
+- **Repository Tests** – Prüfung der JPA-Datenbankoperationen
+- **Integration Tests** – End-to-End Tests, um das Zusammenspiel von Controller, Service und Repository zu prüfen
 
+Alle Tests werden automatisch in der **GitHub Actions CI-Pipeline** ausgeführt, bevor ein Docker Image gebaut wird.
 
+---
 
 ## Ziel des Projekts
 
@@ -124,5 +129,4 @@ Ziel dieses Projekts ist es, praxisnahe Fähigkeiten in folgenden Bereichen zu d
 - Containerisierung mit Docker
 - CI/CD mit GitHub Actions
 - Cloud-Deployment
-
----
+- Test-Driven Development (TDD) und automatisierte Tests

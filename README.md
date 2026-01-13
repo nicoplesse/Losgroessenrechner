@@ -22,7 +22,7 @@ Die Anwendung ermöglicht es, Produkte anzulegen, die optimale Losgröße zu ber
 - Automatisierte CI-Pipeline mit **GitHub Actions**
 - **Umfassende Testabdeckung** (Unit, Controller, Repository, Integration)
 - **Cloud-Deployment**
-  - Docker-basierte Anwendung auf **Render** oder **Railway**
+  - Docker-basierte Anwendung auf **Render**
   - Automatisches Deployment bei Push auf den `dev`-Branch
   - Öffentliche URL zur Live-Demonstration der Anwendung
   - Persistente PostgreSQL-Datenbank in der Cloud

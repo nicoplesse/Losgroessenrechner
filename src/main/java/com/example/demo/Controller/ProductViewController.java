@@ -2,11 +2,13 @@ package com.example.demo.Controller;
 
 import com.example.demo.Entity.Product;
 import com.example.demo.Entity.ProductRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,7 +39,10 @@ public class ProductViewController {
     @GetMapping("/produkt/graph/{id}")
     public String showGraph(@PathVariable("id") Long id, Model model) {
         Product product = productRepo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Produkt nicht gefunden: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Produkt nicht gefunden"
+                ));
 
         model.addAttribute("name", product.getName());
         model.addAttribute("jahresmenge", product.getJahresmenge());

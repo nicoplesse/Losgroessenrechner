@@ -54,12 +54,12 @@ class AndlerFormelTest {
 
         // THEN
         assertEquals(1068.22, result);
-        // Without rounding, the result is 1068.2219333356322
+        // Ohne Rundung wäre das Ergebnis 1068.2219333356322
     }
 
     @Test
     void berechneOptimaleLosgroesse_zinsfussNull_fuehrtZuException() {
-        // Test ensures that providing a zero interest rate (zinsfuss = 0) throws an exception, preventing division by zero in the formula.
+        // Der Test stellt sicher, dass bei einem Zinssatz von 0 (zinsfuss = 0) eine Exception geworfen wird, um eine Division durch null in der Formel zu verhindern.
         assertThrows(IllegalArgumentException.class, () -> {
             andlerFormel.berechneOptimaleLosgroesse(1000, 100, 10, 0);
         });

@@ -60,12 +60,17 @@ Das Ergebnis wird auf ganze Stückzahlen gerundet.
 - GitHub Actions (CI)
 - Docker
 - Docker Hub
+- Render
 
 ---
 
-## Docker & CI/CD
 
-Die Anwendung ist vollständig containerisiert und verfügt über eine **automatische CI-Pipeline**:
+
+## CI/CD: Docker & Cloud-Deployment (Render)
+
+Die Anwendung ist vollständig containerisiert und in eine automatisierte **CI/CD Docker & Cloud-Deployment-Pipeline** integriert.
+
+### Automatischer Dockerbuild
 
 - Bei jedem Push auf den Hauptbranch wird die Anwendung:
   - mit Maven gebaut
@@ -81,7 +86,20 @@ Die Anwendung ist vollständig containerisiert und verfügt über eine **automat
   - **Railway**
 - Öffentliche URL zur Live-Demonstration der Anwendung
 
----
+### Automatisches Deployment mit Render
+
+- Das GitHub-Repository ist direkt mit **Render** verbunden
+- **Jeder Push auf den `dev`-Branch** triggert automatisch:
+  - den Build der Anwendung
+  - das Erstellen des Docker Images
+  - das erneute Deployment des Services auf **Render**
+- Der gesamte Deployment-Prozess läuft vollautomatisch ohne manuelle Eingriffe
+
+### Datenbank (PostgreSQL)
+
+- Die Anwendung verwendet eine **PostgreSQL-Datenbank**, die ebenfalls auf **Render** gehostet wird
+- Persistente Speicherung aller Produkt- und Berechnungsdaten
+
 
 ## Perspektive & geplante Erweiterungen
 
@@ -95,7 +113,7 @@ Geplant ist der Ausbau der Testabdeckung:
 
 
 
-## 🎯 Ziel des Projekts
+## Ziel des Projekts
 
 Ziel dieses Projekts ist es, praxisnahe Fähigkeiten in folgenden Bereichen zu demonstrieren:
 
@@ -105,6 +123,6 @@ Ziel dieses Projekts ist es, praxisnahe Fähigkeiten in folgenden Bereichen zu d
 - Datenpersistenz mit JPA & PostgreSQL
 - Containerisierung mit Docker
 - CI/CD mit GitHub Actions
-- Vorbereitung für Cloud-Deployment
+- Cloud-Deployment
 
 ---

@@ -1,21 +1,19 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Entity.Product;
-import com.example.demo.Service.AndlerFormel;
-import com.example.demo.Entity.ProductRepo;
+import com.example.demo.Service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductDBController.class)
 class ProductDBControllerTest {
@@ -23,50 +21,40 @@ class ProductDBControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // MockBeans für Service & Repo, damit der Controller geladen wird
+    // ✅ EINZIGER Mock: Service
     @MockitoBean
-    private AndlerFormel andlerFormel;
-
-    @MockitoBean
-    private ProductRepo productRepo;
-
-
+    private ProductService productService;
 
     /**
-     * Testet, dass der /produkt/berechnen-Endpoint
-     * die Ergebnis-View zurückgibt und die berechnete Losgröße
-     * korrekt im Model abgelegt wird.
+     * Testet /produkt/berechnen
+     * → View: result
+     * → Model enthält berechnete Losgröße
      */
     @Test
     void berechnen_returnsResultViewWithLosgroesse() throws Exception {
         // GIVEN
-        String name = "TestProdukt";
-        double jahresmenge = 1000;
-        double ruestkosten = 100;
-        double stueckkosten = 10;
-        double zinsfuss = 5;
-        double expectedLosgroesse = 200.0;
-
-        // Service Mock
-        when(andlerFormel.berechneOptimaleLosgroesse(jahresmenge, ruestkosten, stueckkosten, zinsfuss))
-                .thenReturn(expectedLosgroesse);
+        when(productService.berechneLosgroesse(
+                1000, 100, 10, 5
+        )).thenReturn(200.0);
 
         // WHEN + THEN
         mockMvc.perform(post("/produkt/berechnen")
-                        .param("name", name)
-                        .param("jahresmenge", String.valueOf(jahresmenge))
-                        .param("ruestkosten", String.valueOf(ruestkosten))
-                        .param("stueckkosten", String.valueOf(stueckkosten))
-                        .param("zinsfuss", String.valueOf(zinsfuss)))
+                        .param("name", "TestProdukt")
+                        .param("jahresmenge", "1000")
+                        .param("ruestkosten", "100")
+                        .param("stueckkosten", "10")
+                        .param("zinsfuss", "5"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("result"))
-                .andExpect(model().attribute("name", name))
-                .andExpect(model().attribute("losgroesse", expectedLosgroesse));
+                .andExpect(model().attribute("name", "TestProdukt"))
+                .andExpect(model().attribute("losgroesse", 200.0));
+
+        verify(productService).berechneLosgroesse(1000, 100, 10, 5);
     }
 
     /**
-     * Testet, dass der /produkt/speichern-Endpoint
-     * nach dem Absenden des Formulars korrekt auf die Startseite weiterleitet.
+     * Testet /produkt/speichern
+     * → Redirect zur Startseite
      */
     @Test
     void speichern_redirectsToHome() throws Exception {
@@ -79,24 +67,14 @@ class ProductDBControllerTest {
                         .param("losgroesse", "200"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
+
+        verify(productService).erstelleUndSpeichereProdukt(
+                anyString(),
+                anyDouble(),
+                anyDouble(),
+                anyDouble(),
+                anyDouble(),
+                anyDouble()
+        );
     }
-
-    /**
-     * Testet, dass beim Speichern eines Produkts
-     * das Repository aufgerufen wird und ein Product persistiert werden soll.
-     */
-    @Test
-    void speichern_callsRepositorySave() throws Exception {
-        mockMvc.perform(post("/produkt/speichern")
-                        .param("name", "TestProdukt")
-                        .param("jahresmenge", "1000")
-                        .param("ruestkosten", "100")
-                        .param("stueckkosten", "10")
-                        .param("zinsfuss", "5")
-                        .param("losgroesse", "200"))
-                .andExpect(status().is3xxRedirection());
-
-        verify(productRepo).save(any(Product.class));
-    }
-
 }

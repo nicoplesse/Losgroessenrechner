@@ -1,31 +1,20 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Entity.Product;
-import com.example.demo.Entity.ProductRepo;
-import com.example.demo.Service.AndlerFormel;
+import com.example.demo.Service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 @Controller
 public class ProductDBController {
 
-    //........Service
-    private final AndlerFormel andlerFormel;
+    private final ProductService productService;
 
-    //........Repo
-    private final ProductRepo productRepo;
-
-
-
-    public ProductDBController(AndlerFormel andlerFormel, ProductRepo productRepo) {
-        this.andlerFormel = andlerFormel;
-        this.productRepo = productRepo;
+    public ProductDBController(ProductService productService) {
+        this.productService = productService;
     }
 
-
-    @PostMapping("/produkt/berechnen") //Produkt erstellen
+    @PostMapping("/produkt/berechnen")
     public String berechnen(
             @RequestParam String name,
             @RequestParam double jahresmenge,
@@ -35,7 +24,7 @@ public class ProductDBController {
             Model model
     ) {
 
-        double losgroesse = andlerFormel.berechneOptimaleLosgroesse(
+        double losgroesse = productService.berechneLosgroesse(
                 jahresmenge,
                 ruestkosten,
                 stueckkosten,
@@ -49,11 +38,10 @@ public class ProductDBController {
         model.addAttribute("zinsfuss", zinsfuss);
         model.addAttribute("losgroesse", losgroesse);
 
-
         return "result";
     }
 
-    @PostMapping("/produkt/speichern") //Produkt speichern
+    @PostMapping("/produkt/speichern")
     public String speichern(
             @RequestParam String name,
             @RequestParam double jahresmenge,
@@ -62,21 +50,15 @@ public class ProductDBController {
             @RequestParam double zinsfuss,
             @RequestParam double losgroesse
     ) {
-
-        Product product = new Product();
-        product.setName(name);
-        product.setJahresmenge(jahresmenge);
-        product.setRuestkosten(ruestkosten);
-        product.setStueckkosten(stueckkosten);
-        product.setZinsfuss(zinsfuss);
-        product.setOptimaleLosgroesse(losgroesse);
-
-        productRepo.save(product);
+        productService.erstelleUndSpeichereProdukt(
+                name,
+                jahresmenge,
+                ruestkosten,
+                stueckkosten,
+                zinsfuss,
+                losgroesse
+        );
 
         return "redirect:/";
     }
-
-
-
-
 }

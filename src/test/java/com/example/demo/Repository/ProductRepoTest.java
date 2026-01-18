@@ -1,6 +1,6 @@
-package com.example.demo.Entity;
+package com.example.demo.Repository;
 
-import com.example.demo.Repository.ProductRepo;
+import com.example.demo.Entity.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;

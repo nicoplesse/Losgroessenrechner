@@ -27,8 +27,8 @@ class ProductDBControllerTest {
 
     /**
      * Testet /produkt/berechnen
-     * → View: result
-     * → Model enthält berechnete Losgröße
+     * View: result
+     * Model enthält berechnete Losgröße
      */
     @Test
     void berechnen_returnsResultViewWithLosgroesse() throws Exception {
@@ -54,7 +54,7 @@ class ProductDBControllerTest {
 
     /**
      * Testet /produkt/speichern
-     * → Redirect zur Startseite
+     * Redirect zur Startseite
      */
     @Test
     void speichern_redirectsToHome() throws Exception {

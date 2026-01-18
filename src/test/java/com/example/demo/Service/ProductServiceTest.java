@@ -26,7 +26,7 @@ class ProductServiceTest {
     @InjectMocks
     private ProductService productService;
 
-    // 🔹 Berechnung testen
+    // Berechnung testen
     @Test
     void berechneLosgroesse_shouldReturnCalculatedValue() {
         when(andlerFormel.berechneOptimaleLosgroesse(1000, 50, 10, 0.1))
@@ -40,7 +40,7 @@ class ProductServiceTest {
         verify(andlerFormel).berechneOptimaleLosgroesse(1000, 50, 10, 0.1);
     }
 
-    // 🔹 Produkt erstellen & speichern
+    // Produkt erstellen & speichern
     @Test
     void erstelleUndSpeichereProdukt_shouldSaveAndReturnProduct() {
         Product savedProduct = new Product();
@@ -61,7 +61,7 @@ class ProductServiceTest {
         verify(productRepo).save(any(Product.class));
     }
 
-    // 🔹 Alle Produkte finden
+    // Alle Produkte finden
     @Test
     void findeAlleProdukte_shouldReturnList() {
         when(productRepo.findAll()).thenReturn(List.of(
@@ -74,7 +74,7 @@ class ProductServiceTest {
         verify(productRepo).findAll();
     }
 
-    // 🔹 Produkt nach ID finden (OK)
+    // Produkt nach ID finden (OK)
     @Test
     void findeProduktOderThrow_shouldReturnProduct_whenExists() {
         Product product = new Product();
@@ -88,7 +88,7 @@ class ProductServiceTest {
         verify(productRepo).findById(1L);
     }
 
-    // 🔹 Produkt nach ID finden (Fehlerfall)
+    // Produkt nach ID finden (Fehlerfall)
     @Test
     void findeProduktOderThrow_shouldThrowException_whenNotFound() {
         when(productRepo.findById(99L)).thenReturn(Optional.empty());
@@ -101,7 +101,7 @@ class ProductServiceTest {
         verify(productRepo).findById(99L);
     }
 
-    // 🔹 Produkt löschen
+    // Produkt löschen
     @Test
     void loescheProdukt_shouldCallRepositoryDelete() {
         productService.loescheProdukt(5L);
